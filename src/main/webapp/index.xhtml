@@ -1,14 +1,41 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
 
-<body>
-<div class="container">
-	<div class="row" style="margin-top: 30px">
-		<h3>#{todoListManagedBean.title}</h3>
+<h:head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
+	<title>TODO List</title>
+</h:head>
+<h:body>
+	<div class="container h-100">
+	
+		<div class="row justify-content-center mt-5">
+			<h1 class="display-5">#{todoListManagedBean.title}</h1>
+		</div>
+		
+		<div class="row justify-content-center mt-5">
+			<h:form>
+				<div class="form-group">
+					<p:defaultCommand target="save" />
+					<p:inputText class="form-control" value="#{todoListManagedBean.newTaskDescription}" placeholder="#{todoListManagedBean.placeholderNewTask}"></p:inputText>
+					<p:commandButton class="invisible" id="save" action="#{todoListManagedBean.createTask}"></p:commandButton>
+				</div>
+			</h:form>
+		</div>
+		<div class="row justify-content-center mt-1">
+			<p:dataList value="#{todoListManagedBean.tasks}" var="task" itemType="disc">
+		    	#{task.description}, #{task.creationDate}
+			</p:dataList>
+		</div>
+		
+		
 	</div>
-</div>
-</body>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</h:body>
 </html>
