@@ -103,11 +103,13 @@
 			<artifactId>rewrite-config-prettyfaces</artifactId>
 			<version>3.4.1.Final</version>
 		</dependency>
+		<!-- primefaces -->
 		<dependency>
-			<groupId>org.primefaces</groupId>
-			<artifactId>primefaces</artifactId>
-			<version>6.1</version>
+		    <groupId>org.primefaces</groupId>
+		    <artifactId>primefaces</artifactId>
+		    <version>8.0</version>
 		</dependency>
+
 
 		<!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
 		<dependency>

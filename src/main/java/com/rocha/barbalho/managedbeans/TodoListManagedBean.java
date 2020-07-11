@@ -3,6 +3,9 @@ package com.rocha.barbalho.managedbeans;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.el.ELBeanName;
@@ -35,18 +38,38 @@ public class TodoListManagedBean {
 		setTasks(new ArrayList<>());
 		newTaskDescription = "";
 	}
-	
+
 	private void clearNewTaskDescription() {
 		newTaskDescription = "";
+	}
+
+	private void updateList() {
+		tasks = taskService.findAll();
 	}
 
 	public void createTask() {
 		if (newTaskDescription.length() > 0) {
 			Task newTask = taskService.save(new Task(newTaskDescription));
-			System.out.println(newTask);
-			tasks = taskService.findAll();
+			updateList();
 			clearNewTaskDescription();
 		}
+	}
+
+	public void completeTask(Task task) {
+		taskService.update(task.getId(), task);
+		updateList();
+	}
+
+	public void deleteTask(Task task) {
+		taskService.delete(task.getId());
+		System.out.println("Tarefa removida");
+		updateList();
+		addMessage("Tarefa removida");
+	}
+
+	public void addMessage(String summary) {
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", summary));
 	}
 
 	@Deferred

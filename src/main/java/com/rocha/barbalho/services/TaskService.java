@@ -1,6 +1,7 @@
 package com.rocha.barbalho.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -19,7 +20,7 @@ public class TaskService {
 	private TaskRepository taskReposiotory;
 
 	public List<Task> findAll() {
-		return taskReposiotory.findAll();
+		return taskReposiotory.findAllByOrderByIdAsc();
 	}
 
 	public void delete(Long id) {
@@ -33,6 +34,17 @@ public class TaskService {
 	public Task update(Long id, @Valid Task task) {
 		if (taskReposiotory.existsById(id)) {
 			return taskReposiotory.save(task);
+		} else {
+			throw new ServiceNotFoundException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
+		}
+
+	}
+	
+	public Task completeTask(Long id) {
+		Optional<Task> task = taskReposiotory.findById(id);
+		if (task.isPresent()) {
+			task.get().setCompleted(true);
+			return taskReposiotory.save(task.get());
 		} else {
 			throw new ServiceNotFoundException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
 		}
