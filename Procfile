@@ -1,1 +1,1 @@
-web: mvn clean install -Dmaven.test.skip=true && mvn spring-boot:run
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/*.jar
