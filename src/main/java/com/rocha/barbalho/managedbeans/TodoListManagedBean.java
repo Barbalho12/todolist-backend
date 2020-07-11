@@ -49,7 +49,7 @@ public class TodoListManagedBean {
 
 	public void createTask() {
 		if (newTaskDescription.length() > 0) {
-			Task newTask = taskService.save(new Task(newTaskDescription));
+			taskService.save(new Task(newTaskDescription));
 			updateList();
 			clearNewTaskDescription();
 		}
@@ -62,7 +62,6 @@ public class TodoListManagedBean {
 
 	public void deleteTask(Task task) {
 		taskService.delete(task.getId());
-		System.out.println("Tarefa removida");
 		updateList();
 		addMessage("Tarefa removida");
 	}

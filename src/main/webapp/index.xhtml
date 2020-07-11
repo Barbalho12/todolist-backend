@@ -23,37 +23,31 @@
 				<div class="form-group">
 				
 					<p:defaultCommand target="save" />
-					<p:inputText class="form-control" value="#{todoListManagedBean.newTaskDescription}" placeholder="#{todoListManagedBean.placeholderNewTask}"></p:inputText>
-					<p:commandButton class="invisible" id="save" action="#{todoListManagedBean.createTask}"></p:commandButton>
+					<p:inputText id="itNewTask" class="form-control" value="#{todoListManagedBean.newTaskDescription}" placeholder="#{todoListManagedBean.placeholderNewTask}"></p:inputText>
+					<p:commandButton update="todoForm:tasks itNewTask" class="invisible" id="save" action="#{todoListManagedBean.createTask}"></p:commandButton>
 				</div>
 			</h:form>
 		</div>
 		<div class="row justify-content-center mt-1">
 			<h:form id="todoForm">
 				<p:dataList id="tasks" value="#{todoListManagedBean.tasks}" var="task" type="definition">	
-				
 					<div>
-					
 	   					<h:selectBooleanCheckbox value="#{task.completed}">
 	   						<f:ajax render="tasks" listener="#{todoListManagedBean.completeTask(task)}"/>
 	   					</h:selectBooleanCheckbox>
 
 	   					#{task.description}
 	   					
-	   					<p:commandButton update="tasks" action="#{todoListManagedBean.deleteTask(task)}">
-	   						<!-- <i class="fas fa-trash"/> -->
-	   					</p:commandButton>
+	   					<p:commandLink update="todoForm:tasks" id="ajax" action="#{todoListManagedBean.deleteTask(task)}">
+					        <i class="fas fa-trash"/> 
+					    </p:commandLink>
    					
    					</div>
-
 				</p:dataList>
-				
 				<p:messages id="messages" showDetail="true" closable="true"><p:autoUpdate /></p:messages>
-				
 			</h:form>
 		</div>
 	</div>
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </h:body>
