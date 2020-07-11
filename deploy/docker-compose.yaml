@@ -1,0 +1,15 @@
+version: "3"
+services:
+  postgres-todolist:
+    container_name: postgres-todolist
+    image: 'bitnami/postgresql:latest'
+    environment:
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=1234
+      - POSTGRESQL_DATABASE=todolistdb
+    volumes:
+      - postgres-todolist-volume:/data/postgres
+    ports:
+      - "5432:5432"
+volumes:
+  postgres-todolist-volume:
