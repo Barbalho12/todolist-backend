@@ -94,6 +94,7 @@ public class TodoListManagedBean {
 	}
 
 	public void updateTask(Long taskId, String taskDescription) {
+		System.out.println(taskId+" "+taskDescription);
 		if(taskDescription.length() >0){
 			Task taskEdit = null;
 			for(Task task : tasks ){
