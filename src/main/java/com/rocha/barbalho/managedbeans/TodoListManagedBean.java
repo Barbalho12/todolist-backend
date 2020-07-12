@@ -48,14 +48,6 @@ public class TodoListManagedBean {
 	}
 
 	public int getItemsLeft(){
-		// int itemsLeft = 0;
-		// for(Task task : tasks ){
-		// 	if(!task.isCompleted()){
-		// 		itemsLeft++;
-		// 	}
-		// }
-
-		
 		return taskService.findAllLeft().size();
 	}
 
@@ -99,6 +91,19 @@ public class TodoListManagedBean {
 			updateList();
 			clearNewTaskDescription();
 		}
+	}
+
+	public void updateTask(Long taskId, String taskDescription) {
+		if(taskDescription.length() >0){
+			Task taskEdit = null;
+			for(Task task : tasks ){
+				if(task.getId()==taskId){
+					taskEdit = task;
+					break;
+				}
+			}
+			taskService.update(taskId, taskEdit);
+		}	
 	}
 
 	public void completeTask(Task task) {

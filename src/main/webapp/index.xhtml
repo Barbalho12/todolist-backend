@@ -68,6 +68,7 @@
 
 			<div class="card-body">
 				<h:form id="todoForm" class="row justify-content-center mt-1">
+					
 
 					<h:outputText class="text-muted" value="Sem tarefas" rendered="#{empty todoListManagedBean.tasks}" />
 					<ul class="w-100 list-group list-group-flush">
@@ -82,10 +83,14 @@
 								</div>
 		
 								<div class="col-10 justify-content-center">
-									<p style="word-break: break-all;"> 
-										#{task.description}
-									</p>
-									
+									<p:inplace id="basic-#{task.id}">
+										<p:inputText value="#{task.description}" id="itNewTask" class="form-control" style="word-break: break-all;">
+										
+											
+										</p:inputText>
+										
+									</p:inplace>
+									<p:commandButton update="todoForm" class="invisible" styleClass="display:none" id="update" action="#{todoListManagedBean.updateTask(task.id, task.description)}"></p:commandButton>
 								</div>
 								
 								<div class="col-1 float-right">
