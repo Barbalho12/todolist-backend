@@ -8,7 +8,8 @@
 <h:head>
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/> -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css"/>
+	<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css"/> -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 	<title>TODO List</title>
 	<style>
 		.ui-datalist-empty-message{
@@ -28,11 +29,27 @@
 			width: 100%;
 			display: block;
 		}
+		.ui-messages-info, .ui-message-info{
+			color: #6c6f71 !important;
+			background-color: #e0e0e0 !important;
+			border-color: rgba(0, 0, 0, 0) !important;
+			width: 100%;
+		}
+		.ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield{
+			-webkit-box-shadow: inset 0 2px 2px #faf7f7 !important; 
+		}
+
+		a{
+			opacity: 0.8 !important;
+		}
+		a:hover {
+			text-decoration:none !important;
+			opacity: 1.0 !important;
+		} 
 	</style>
 </h:head>
 <h:body>
 	<div class="container-fluid h-100 w-50" style="min-width: 460px">
-
 		<div class="row justify-content-center mt-5">
 			<h1 class="display-5 text-muted">#{todoListManagedBean.title}</h1>
 		</div>
@@ -43,7 +60,7 @@
 				<h:form class="row justify-content-center mt-5 w-100">
 					<div class="form-group col-12">
 						<p:defaultCommand target="save" />
-						<p:inputText id="itNewTask" class="form-control" value="#{todoListManagedBean.newTaskDescription}" placeholder="#{todoListManagedBean.placeholderNewTask}"></p:inputText>
+						<p:inputText id="itNewTask" class="form-control form-control-lg" value="#{todoListManagedBean.newTaskDescription}" placeholder="#{todoListManagedBean.placeholderNewTask}"></p:inputText>
 						<p:commandButton update="todoForm itNewTask actionForm:lefts" class="invisible" id="save" action="#{todoListManagedBean.createTask}"></p:commandButton>
 					</div>
 				</h:form>
@@ -52,7 +69,7 @@
 			<div class="card-body">
 				<h:form id="todoForm" class="row justify-content-center mt-1">
 
-
+					<h:outputText class="text-muted" value="Sem tarefas" rendered="#{empty todoListManagedBean.tasks}" />
 					<ul class="w-100 list-group list-group-flush">
 					<ui:repeat id="tasks" value="#{todoListManagedBean.tasks}" var="task">
 					
@@ -73,7 +90,7 @@
 								
 								<div class="col-1 float-right">
 									<p:commandLink update="todoForm actionForm:lefts" id="ajax" action="#{todoListManagedBean.deleteTask(task)}">
-										<i class="fas fa-trash"/> 
+										<span class="material-icons text-danger">clear</span>
 									</p:commandLink>
 								</div>
 							</div>
@@ -90,24 +107,24 @@
 						</div>
 						<div class="col-6 text-center"> 
 						
-								<p:commandLink update="todoForm actionForm:lefts" action="#{todoListManagedBean.filterAll()}" styleClass="mr-2 text-center">
-									<h:outputText value="Todas" />
+								<p:commandLink update="todoForm actionForm" action="#{todoListManagedBean.filterAll()}" styleClass="mr-2 text-center">
+									<h:outputText value="Todas" class="#{todoListManagedBean.activeList eq 'all' ? 'text-primary' : 'text-muted'}"/>
 								</p:commandLink>
 						
 						
-								<p:commandLink update="todoForm actionForm:lefts" action="#{todoListManagedBean.filterLeft()}" styleClass="mr-2 text-center">
-									<h:outputText value="Pendentes" />
+								<p:commandLink update="todoForm actionForm" action="#{todoListManagedBean.filterLeft()}" styleClass="mr-2 text-center">
+									<h:outputText value="Pendentes" class="#{todoListManagedBean.activeList eq 'left' ? 'text-primary' : 'text-muted'}"/>
 								</p:commandLink>
 						
 					
-								<p:commandLink update="todoForm actionForm:lefts" action="#{todoListManagedBean.filterCompleted()}" styleClass="mr-2 text-center" >
-									<h:outputText value="Concluídas" />
+								<p:commandLink update="todoForm actionForm" action="#{todoListManagedBean.filterCompleted()}" styleClass="mr-2 text-center" >
+									<h:outputText value="Concluídas" class="#{todoListManagedBean.activeList eq 'completed' ? 'text-primary' : 'text-muted'}" />
 								</p:commandLink>
 						
 						</div>
 						<div class="col-3 float-right text-center"> 
-							<p:commandLink update="todoForm actionForm:lefts" action="#{todoListManagedBean.clearAllCompleted()}" >
-								<h:outputText value="Limpar concluídas"/>
+							<p:commandLink update="todoForm actionForm:lefts" action="#{todoListManagedBean.clearAllCompleted()}">
+								<h:outputText value="Limpar concluídas" class="text-danger"/>
 							</p:commandLink>
 						</div>
 					</div>
@@ -115,9 +132,9 @@
 				
 			</div>
 		</div>
-		<!--<div class="row justify-content-center mt-1 w-100">
-			<p:messages id="messages" showDetail="true" closable="true" styleClass="row w-100"><p:autoUpdate /></p:messages>
-		</div>-->
+		<div class="justify-content-center mt-1 w-100">
+			<p:messages id="messages" showDetail="true" closable="true" styleClass="w-100"><p:autoUpdate /></p:messages>
+		</div>
 	</div>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>

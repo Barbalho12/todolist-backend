@@ -35,19 +35,28 @@ public class TodoListManagedBean {
 
 	private String newTaskDescription;
 
+	private String activeList;
+
+	public String getActiveList() {
+		return activeList;
+	}
+
 	public TodoListManagedBean() {
 		setTasks(new ArrayList<>());
 		newTaskDescription = "";
+		activeList= "all";
 	}
 
 	public int getItemsLeft(){
-		int itemsLeft = 0;
-		for(Task task : tasks ){
-			if(!task.isCompleted()){
-				itemsLeft++;
-			}
-		}
-		return itemsLeft;
+		// int itemsLeft = 0;
+		// for(Task task : tasks ){
+		// 	if(!task.isCompleted()){
+		// 		itemsLeft++;
+		// 	}
+		// }
+
+		
+		return taskService.findAllLeft().size();
 	}
 
 	private void clearNewTaskDescription() {
@@ -55,18 +64,27 @@ public class TodoListManagedBean {
 	}
 
 	private void updateList() {
-		tasks = taskService.findAll();
+		if(activeList.equals("all")){
+			filterAll();
+		}else if(activeList.equals("left")){
+			filterLeft();
+		}else if(activeList.equals("completed")){
+			filterCompleted();
+		}
 	}
 
 	public void filterAll(){
-		updateList();
+		activeList = "all";
+		tasks = taskService.findAll();
 	}
 
 	public void filterLeft(){
+		activeList = "left";
 		tasks = taskService.findAllLeft();
 	}
 
 	public void filterCompleted(){
+		activeList = "completed";
 		tasks = taskService.findAllCompleted();
 	}
 
@@ -96,7 +114,7 @@ public class TodoListManagedBean {
 
 	public void addMessage(String summary) {
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", summary));
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "", summary));
 	}
 
 	@Deferred
