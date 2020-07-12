@@ -39,12 +39,39 @@ public class TodoListManagedBean {
 		newTaskDescription = "";
 	}
 
+	public int getItemsLeft(){
+		int itemsLeft = 0;
+		for(Task task : tasks ){
+			if(!task.isCompleted()){
+				itemsLeft++;
+			}
+		}
+		return itemsLeft;
+	}
+
 	private void clearNewTaskDescription() {
 		newTaskDescription = "";
 	}
 
 	private void updateList() {
 		tasks = taskService.findAll();
+	}
+
+	public void filterAll(){
+		updateList();
+	}
+
+	public void filterLeft(){
+		tasks = taskService.findAllLeft();
+	}
+
+	public void filterCompleted(){
+		tasks = taskService.findAllCompleted();
+	}
+
+	public void clearAllCompleted(){
+		taskService.clearAllCompleted();
+		updateList();
 	}
 
 	public void createTask() {

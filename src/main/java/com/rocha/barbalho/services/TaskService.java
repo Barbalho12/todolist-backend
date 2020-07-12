@@ -23,6 +23,18 @@ public class TaskService {
 		return taskReposiotory.findAllByOrderByIdAsc();
 	}
 
+	public List<Task> findAllCompleted(){
+		return taskReposiotory.findByCompletedTrueOrderByIdAsc();
+	}
+
+	public List<Task> findAllLeft(){
+		return taskReposiotory.findByCompletedFalseOrderByIdAsc();
+	}
+
+	public void clearAllCompleted(){
+		taskReposiotory.deleteByCompletedTrue();
+	}
+
 	public void delete(Long id) {
 		if (taskReposiotory.existsById(id)) {
 			taskReposiotory.deleteById(id);

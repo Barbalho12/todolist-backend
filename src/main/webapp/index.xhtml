@@ -17,7 +17,7 @@
 		}
 
 		.ui-datalist{
-			width: 50%;
+			width: 100%;
 		}
 		.ui-datalist-content{
 			width: 100%;
@@ -31,10 +31,12 @@
 			width: 100%;
 			display: block;
 		}
+
+		.min
 	</style>
 </h:head>
 <h:body>
-	<div class="container h-100">
+	<div class="container-fluid h-100 w-50" style="min-width: 460px">
 	
 		<div class="row justify-content-center mt-5">
 			<h1 class="display-5">#{todoListManagedBean.title}</h1>
@@ -46,7 +48,7 @@
 				
 					<p:defaultCommand target="save" />
 					<p:inputText id="itNewTask" class="form-control" value="#{todoListManagedBean.newTaskDescription}" placeholder="#{todoListManagedBean.placeholderNewTask}"></p:inputText>
-					<p:commandButton update="todoForm:tasks itNewTask" class="invisible" id="save" action="#{todoListManagedBean.createTask}"></p:commandButton>
+					<p:commandButton update="todoForm:tasks itNewTask todoForm:lefts" class="invisible" id="save" action="#{todoListManagedBean.createTask}"></p:commandButton>
 				</div>
 			</h:form>
 		</div>
@@ -57,7 +59,7 @@
 					<div class="row">
 						<div class="col-1">
 							<h:selectBooleanCheckbox value="#{task.completed}">
-								<f:ajax render="tasks" listener="#{todoListManagedBean.completeTask(task)}"/>
+								<f:ajax render="tasks todoForm:lefts" listener="#{todoListManagedBean.completeTask(task)}"/>
 							</h:selectBooleanCheckbox>
 						</div>
 
@@ -69,7 +71,7 @@
 						</div>
 						
 						<div class="col-1 float-right">
-							<p:commandLink update="todoForm:tasks" id="ajax" action="#{todoListManagedBean.deleteTask(task)}">
+							<p:commandLink update="todoForm:tasks todoForm:lefts" id="ajax" action="#{todoListManagedBean.deleteTask(task)}">
 								<i class="fas fa-trash"/> 
 							</p:commandLink>
 						</div>
@@ -77,9 +79,39 @@
 					
 			</p:dataList>
 			
+	
 			<div class="row justify-content-center mt-1 w-100">
-				<p:messages id="messages" showDetail="true" closable="true" styleClass="row"><p:autoUpdate /></p:messages>
+				<div class="col-3"> 
+					<h:outputText id="lefts" value="#{todoListManagedBean.itemsLeft} pendentes"/>
+				</div>
+				<div class="col-6 text-center"> 
+				
+						<p:commandLink update="todoForm:tasks todoForm:lefts" action="#{todoListManagedBean.filterAll()}" styleClass="mr-2 text-center">
+							<h:outputText value="Todas" />
+						</p:commandLink>
+				
+				
+						<p:commandLink update="todoForm:tasks todoForm:lefts" action="#{todoListManagedBean.filterLeft()}" styleClass="mr-2 text-center">
+							<h:outputText value="Pendentes" />
+						</p:commandLink>
+				
+			
+						<p:commandLink update="todoForm:tasks todoForm:lefts" action="#{todoListManagedBean.filterCompleted()}" styleClass="mr-2 text-center" >
+							<h:outputText value="Concluídas" />
+						</p:commandLink>
+				
+				</div>
+				<div class="col-3 float-right text-center"> 
+					<p:commandLink update="todoForm:tasks todoForm:lefts" action="#{todoListManagedBean.clearAllCompleted()}" >
+						<h:outputText value="Limpar concluídas"/>
+					</p:commandLink>
+				</div>
 			</div>
+	
+		
+			<!-- <div class="row justify-content-center mt-1 w-100">
+				<p:messages id="messages" showDetail="true" closable="true" styleClass="row"><p:autoUpdate /></p:messages>
+			</div> -->
 		</h:form>
 	</div>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
