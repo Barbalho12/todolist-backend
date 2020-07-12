@@ -6,10 +6,32 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/> -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css"/>
 	<title>TODO List</title>
+	<style>
+
+		.ui-datalist-empty-message{
+			text-align: center;
+		}
+
+		.ui-datalist{
+			width: 50%;
+		}
+		.ui-datalist-content{
+			width: 100%;
+			border:0 !important;
+		}	
+		.ui-datalist-data{
+			width: 100%;
+		}
+
+		.ui-datalist-item{
+			width: 100%;
+			display: block;
+		}
+	</style>
 </h:head>
 <h:body>
 	<div class="container h-100">
@@ -28,25 +50,37 @@
 				</div>
 			</h:form>
 		</div>
-		<div class="row justify-content-center mt-1">
-			<h:form id="todoForm">
-				<p:dataList id="tasks" value="#{todoListManagedBean.tasks}" var="task" type="definition">	
-					<div>
-	   					<h:selectBooleanCheckbox value="#{task.completed}">
-	   						<f:ajax render="tasks" listener="#{todoListManagedBean.completeTask(task)}"/>
-	   					</h:selectBooleanCheckbox>
+	
+		<h:form id="todoForm" class="row justify-content-center mt-1">
+			<p:dataList id="tasks" value="#{todoListManagedBean.tasks}" var="task" type="definition" styleClass="row" emptyMessage="Não há tarefas cadastradas">	
+	
+					<div class="row">
+						<div class="col-1">
+							<h:selectBooleanCheckbox value="#{task.completed}">
+								<f:ajax render="tasks" listener="#{todoListManagedBean.completeTask(task)}"/>
+							</h:selectBooleanCheckbox>
+						</div>
 
-	   					#{task.description}
-	   					
-	   					<p:commandLink update="todoForm:tasks" id="ajax" action="#{todoListManagedBean.deleteTask(task)}">
-					        <i class="fas fa-trash"/> 
-					    </p:commandLink>
-   					
-   					</div>
-				</p:dataList>
-				<p:messages id="messages" showDetail="true" closable="true"><p:autoUpdate /></p:messages>
-			</h:form>
-		</div>
+						<div class="col-10 justify-content-center">
+							<p style="word-break: break-all;"> 
+								#{task.description}
+							</p>
+							
+						</div>
+						
+						<div class="col-1 float-right">
+							<p:commandLink update="todoForm:tasks" id="ajax" action="#{todoListManagedBean.deleteTask(task)}">
+								<i class="fas fa-trash"/> 
+							</p:commandLink>
+						</div>
+					</div>
+					
+			</p:dataList>
+			
+			<div class="row justify-content-center mt-1 w-100">
+				<p:messages id="messages" showDetail="true" closable="true" styleClass="row"><p:autoUpdate /></p:messages>
+			</div>
+		</h:form>
 	</div>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
