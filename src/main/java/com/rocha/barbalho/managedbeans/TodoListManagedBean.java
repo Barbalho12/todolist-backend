@@ -80,6 +80,7 @@ public class TodoListManagedBean {
 		tasks = taskService.findAllCompleted();
 	}
 
+
 	public void clearAllCompleted(){
 		taskService.clearAllCompleted();
 		updateList();
@@ -93,8 +94,26 @@ public class TodoListManagedBean {
 		}
 	}
 
+	public void completeAll() {
+		if(getItemsLeft() > 0){
+			for(Task task : tasks ){
+				if(!task.isCompleted()){
+					task.setCompleted(true);
+					taskService.update(task.getId(), task);
+				}
+			}
+		}else{
+			for(Task task : tasks ){
+				if(task.isCompleted()){
+					task.setCompleted(false);
+					taskService.update(task.getId(), task);
+				}
+			}
+		}
+		updateList();
+	}
+
 	public void updateTask(Long taskId, String taskDescription) {
-		System.out.println(taskId+" "+taskDescription);
 		if(taskDescription.length() >0){
 			Task taskEdit = null;
 			for(Task task : tasks ){

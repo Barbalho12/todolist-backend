@@ -8,7 +8,6 @@
 <h:head>
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/> -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
-	<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css"/> -->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 	<title>TODO List</title>
 	<style>
@@ -46,6 +45,12 @@
 			text-decoration:none !important;
 			opacity: 1.0 !important;
 		} 
+		.completedTask{
+			text-decoration:line-through !important;
+		}
+		.nocompletedTask{
+			text-decoration:none !important;
+		}
 	</style>
 </h:head>
 <h:body>
@@ -57,12 +62,19 @@
 		<div class="card">
 			
 			<div class="card-header">
-				<h:form class="row justify-content-center mt-5 w-100">
-					<div class="form-group col-12">
+				<h:form id="headerForm" class="row justify-content-center mt-5 w-100">
+					
 						<p:defaultCommand target="save" />
-						<p:inputText id="itNewTask" class="form-control form-control-lg" value="#{todoListManagedBean.newTaskDescription}" placeholder="#{todoListManagedBean.placeholderNewTask}"></p:inputText>
-						<p:commandButton update="todoForm itNewTask actionForm:lefts" class="invisible" id="save" action="#{todoListManagedBean.createTask}"></p:commandButton>
-					</div>
+						<div class="col-1 d-flex flex-column justify-content-center">
+							<p:commandLink update="todoForm headerForm actionForm" action="#{todoListManagedBean.completeAll()}">
+								<span class="material-icons #{todoListManagedBean.itemsLeft eq 0 ? 'text-primary' : 'text-muted' }">done_all</span>
+							</p:commandLink>
+						</div>
+						<div class="col-11">
+							<p:inputText id="itNewTask" class="form-control form-control-lg" value="#{todoListManagedBean.newTaskDescription}" placeholder="#{todoListManagedBean.placeholderNewTask}"></p:inputText>
+							<p:commandButton update="todoForm itNewTask actionForm:lefts" class="d-none"  id="save" action="#{todoListManagedBean.createTask}"></p:commandButton>
+						</div>
+				
 				</h:form>
 			</div>
 
@@ -82,8 +94,8 @@
 								</div>
 		
 								<div class="col-10 justify-content-center">
-									<p:inplace id="basic-#{task.id}">
-										<p:inputText value="#{task.description}" id="itNewTask" class="form-control" style="word-break: break-all;"> 
+									<p:inplace id="basic-#{task.id}" class="#{ task.completed ? 'completedTask' : 'nocompletedTask'}">
+										<p:inputText value="#{task.description}" id="itNewTask" class="form-control #{ task.completed ? 'completedTask' : 'nocompletedTask'}" style="word-break: break-all;"> 
 											<p:ajax  update="todoForm" listener="#{todoListManagedBean.updateTask(task.id, task.description)}"/>
 										</p:inputText>
 									</p:inplace>
