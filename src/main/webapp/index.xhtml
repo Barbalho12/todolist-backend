@@ -72,7 +72,7 @@
 						</div>
 						<div class="col-11">
 							<p:inputText id="itNewTask" class="form-control form-control-lg" value="#{todoListManagedBean.newTaskDescription}" placeholder="#{todoListManagedBean.placeholderNewTask}"></p:inputText>
-							<p:commandButton update="todoForm itNewTask actionForm:lefts" class="d-none"  id="save" action="#{todoListManagedBean.createTask}"></p:commandButton>
+							<p:commandButton update="todoForm headerForm actionForm:lefts" class="d-none"  id="save" action="#{todoListManagedBean.createTask}"></p:commandButton>
 						</div>
 				
 				</h:form>
@@ -102,7 +102,7 @@
 								</div>
 								
 								<div class="col-1 float-right">
-									<p:commandLink update="todoForm actionForm:lefts" id="ajax" action="#{todoListManagedBean.deleteTask(task)}">
+									<p:commandLink update="todoForm headerForm actionForm:lefts" id="ajax" action="#{todoListManagedBean.deleteTask(task)}">
 										<span class="material-icons text-danger">clear</span>
 									</p:commandLink>
 								</div>
