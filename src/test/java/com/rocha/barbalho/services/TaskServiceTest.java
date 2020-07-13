@@ -1,5 +1,7 @@
 package com.rocha.barbalho.services;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
@@ -9,7 +11,6 @@ import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,65 +41,114 @@ public class TaskServiceTest {
 	}
 
 	@DisplayName("Lista todas as tarefas")
-	@Disabled("Not implemented yet")
 	@Test
 	public void findAllTest() {
-
+		List<Task> tasks = taskService.findAll();
+		assertEquals(0, tasks.size(), "Zero elementos de retorno");
+		taskList.forEach(t -> taskService.save(t));
+		tasks = taskService.findAll();
+		assertEquals(taskList.size(), tasks.size(), "Retorno vazio");
 	}
 
 	@DisplayName("Lista todas as tarefas finalizadas")
 	@Test
-	@Disabled("Not implemented yet")
 	public void findAllCompletedTest() {
+		taskList.get(0).setCompleted(true);
+		taskList.get(2).setCompleted(true);
+		taskList.forEach(t -> taskService.save(t));
+
+		List<Task> tasks = taskService.findAllCompleted();
+		assertEquals(2, tasks.size());
+		tasks.forEach(t -> assertEquals(true, t.isCompleted()));
 
 	}
 
 	@DisplayName("Lista todas as tarefas não finalizadas")
 	@Test
-	@Disabled("Not implemented yet")
 	public void findAllLeftTest() {
+		taskList.get(0).setCompleted(true);
+		taskList.forEach(t -> taskService.save(t));
 
+		List<Task> tasks = taskService.findAllLeft();
+		assertEquals(2, tasks.size());
+		tasks.forEach(t -> assertEquals(false, t.isCompleted()));
 	}
 
 	@DisplayName("Remove todas as tarefas finalizadas")
 	@Test
-	@Disabled("Not implemented yet")
 	public void clearAllCompletedTest() {
+		taskList.get(0).setCompleted(true);
+		taskList.get(2).setCompleted(true);
+		taskList.forEach(t -> taskService.save(t));
 
+		taskService.clearAllCompleted();
+		List<Task> tasks = taskService.findAllCompleted();
+		assertEquals(0, tasks.size());
+
+		tasks = taskService.findAllLeft();
+		assertEquals(1, tasks.size());
 	}
 
 	@DisplayName("Remove tarefa")
 	@Test
-	@Disabled("Not implemented yet")
 	public void deleteTest() {
+		taskList.forEach(t -> taskService.save(t));
+		List<Task> tasks = taskService.findAll();
 
+		long idTaskRemoved = tasks.get(0).getId();
+
+		taskService.delete(idTaskRemoved);
+
+		assertThrows(NotFoundServiceException.class, () -> {
+			taskService.findById(idTaskRemoved);
+		});
+
+		tasks = taskService.findAll();
+		tasks.forEach(t -> assertNotEquals(idTaskRemoved, t.getId()));
 	}
 
 	@DisplayName("Atualiza tarefa")
 	@Test
-	@Disabled("Not implemented yet")
 	public void updateTest() {
-
+		Task task = taskService.save(new Task("Descrição"));
+		Task taskEditada = taskService.update(task.getId(), new Task("Nova descrição"));
+		assertEquals("Nova descrição", taskEditada.getDescription());
+		assertNotEquals(task.getDescription(), taskEditada.getDescription());
 	}
 
+	@DisplayName("Completa uma tarefa")
 	@Test
-	@Disabled("Not implemented yet")
 	public void completeTask() {
+		taskList.forEach(t -> taskService.save(t));
+		List<Task> tasks = taskService.findAll();
+		long idTask = tasks.get(0).getId();
+		taskService.completeTask(idTask);
+		Task task = taskService.findById(idTask);
+		assertEquals(true, task.isCompleted());
+
+		tasks = taskService.findAll();
+		tasks.forEach(t -> {
+			if (t.getId() != idTask)
+				assertEquals(false, t.isCompleted());
+		});
 
 	}
 
 	@DisplayName("Busca tarefa pelo Id")
 	@Test
-	@Disabled("Not implemented yet")
 	public void findById() {
-
+		Task task = taskService.save(new Task("Descrição"));
+		Task task2 = taskService.findById(task.getId());
+		assertEquals(task, task2);
 	}
 
 	@DisplayName("Cadastra tarefa")
 	@Test
-	@Disabled("Not implemented yet")
 	public void saveTest() {
-
+		Task task = taskService.save(new Task("Descrição"));
+		Long taskId = task.getId();
+		Task task2 = taskService.findById(taskId);
+		assertEquals(task, task2);
 	}
 
 	@DisplayName("Erro ao Cadastrar tarefa sem descrição")
