@@ -1,7 +1,11 @@
 package com.rocha.barbalho.services;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Arrays;
 import java.util.List;
+
+import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.rocha.barbalho.exceptions.BadRequestServiceExcepetion;
+import com.rocha.barbalho.exceptions.NotFoundServiceException;
 import com.rocha.barbalho.models.Task;
 
 @SpringBootTest
@@ -97,23 +103,45 @@ public class TaskServiceTest {
 
 	@DisplayName("Erro ao Cadastrar tarefa sem descrição")
 	@Test
-	@Disabled("Not implemented yet")
 	public void saveTestDescriptionNull() {
+		Task task = new Task();
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskService.save(task);
+		});
+	}
 
+	@DisplayName("Erro ao Cadastrar tarefa nula")
+	@Test
+	public void saveTestNull() {
+		assertThrows(BadRequestServiceExcepetion.class, () -> {
+			taskService.save(null);
+		});
 	}
 
 	@DisplayName("Erro ao Deletar tarefa com id inexistente")
 	@Test
-	@Disabled("Not implemented yet")
 	public void deleteNotFound() {
-
+		assertThrows(NotFoundServiceException.class, () -> {
+			taskService.delete(999999l);
+		});
 	}
 
 	@DisplayName("Erro ao Atualizar tarefa com id inexistente")
 	@Test
-	@Disabled("Not implemented yet")
 	public void updateNotFound() {
+		assertThrows(NotFoundServiceException.class, () -> {
+			taskService.update(999999l, new Task("update"));
+		});
+	}
 
+	@DisplayName("Erro ao Atualizar descrição tarefa com valor nulo")
+	@Test
+	public void updateDescriptionNull() {
+		Task taskSaved = taskService.save(getTaskList().get(0));
+		taskSaved.setDescription(null);
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskService.update(taskSaved.getId(), new Task(null));
+		});
 	}
 
 	public static List<Task> getTaskList() {

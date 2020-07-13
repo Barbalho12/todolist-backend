@@ -3,12 +3,14 @@ package com.rocha.barbalho.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rocha.barbalho.exceptions.ServiceNotFoundException;
+import com.rocha.barbalho.exceptions.BadRequestServiceExcepetion;
+import com.rocha.barbalho.exceptions.NotFoundServiceException;
 import com.rocha.barbalho.models.Task;
 import com.rocha.barbalho.repositories.TaskRepository;
 import com.rocha.barbalho.statics.StaticMessages;
@@ -39,15 +41,19 @@ public class TaskService {
 		if (taskReposiotory.existsById(id)) {
 			taskReposiotory.deleteById(id);
 		} else {
-			throw new ServiceNotFoundException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
+			throw new NotFoundServiceException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
 		}
 	}
 
+	@Transactional
 	public Task update(Long id, @Valid Task task) {
+		if(task == null) {
+			throw new BadRequestServiceExcepetion("Tarefa não pode ser nula");
+		}
 		if (taskReposiotory.existsById(id)) {
 			return taskReposiotory.save(task);
 		} else {
-			throw new ServiceNotFoundException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
+			throw new NotFoundServiceException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
 		}
 
 	}
@@ -58,7 +64,7 @@ public class TaskService {
 			task.get().setCompleted(true);
 			return taskReposiotory.save(task.get());
 		} else {
-			throw new ServiceNotFoundException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
+			throw new NotFoundServiceException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
 		}
 
 	}
@@ -67,11 +73,15 @@ public class TaskService {
 		if (taskReposiotory.existsById(id)) {
 			return taskReposiotory.getOne(id);
 		} else {
-			throw new ServiceNotFoundException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
+			throw new NotFoundServiceException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
 		}
 	}
 
+	@Transactional
 	public Task save(@Valid Task task) {
+		if(task == null) {
+			throw new BadRequestServiceExcepetion("Tarefa não pode ser nula");
+		}
 		task.setId(null);
 		return taskReposiotory.save(task);
 	}
