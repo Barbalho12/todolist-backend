@@ -21,22 +21,27 @@ public class TaskService {
 	@Autowired
 	private TaskRepository taskReposiotory;
 
+	@Transactional
 	public List<Task> findAll() {
 		return taskReposiotory.findAllByOrderByIdAsc();
 	}
 
+	@Transactional
 	public List<Task> findAllCompleted(){
 		return taskReposiotory.findByCompletedTrueOrderByIdAsc();
 	}
 
+	@Transactional
 	public List<Task> findAllLeft(){
 		return taskReposiotory.findByCompletedFalseOrderByIdAsc();
 	}
 
+	@Transactional
 	public void clearAllCompleted(){
 		taskReposiotory.deleteByCompletedTrue();
 	}
 
+	@Transactional
 	public void delete(Long id) {
 		if (taskReposiotory.existsById(id)) {
 			taskReposiotory.deleteById(id);
@@ -58,6 +63,7 @@ public class TaskService {
 
 	}
 	
+	@Transactional
 	public Task completeTask(Long id) {
 		Optional<Task> task = taskReposiotory.findById(id);
 		if (task.isPresent()) {
@@ -69,9 +75,11 @@ public class TaskService {
 
 	}
 
+	@Transactional
 	public Task findById(Long id) {
-		if (taskReposiotory.existsById(id)) {
-			return taskReposiotory.getOne(id);
+		Optional<Task> task = taskReposiotory.findById(id);
+		if (task.isPresent()) {
+			return task.get();
 		} else {
 			throw new NotFoundServiceException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
 		}
