@@ -59,6 +59,11 @@ public class TaskController {
 		return taskService.update(id, entity);
 	}
 
+	@PutMapping("/{id}/set-completed/{isCompleted}")
+	public Task setCompleted(@PathVariable Long id, @PathVariable Boolean isCompleted) {
+		return taskService.setCompleted(id, isCompleted);
+	}
+
 	@PutMapping("/complete/{id}")
 	public Task update(@PathVariable Long id) {
 		return taskService.completeTask(id);

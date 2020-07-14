@@ -62,6 +62,18 @@ public class TaskService {
 		}
 
 	}
+
+
+	@Transactional
+	public Task setCompleted(Long id, Boolean isCompleted) {
+		Optional<Task> task = taskReposiotory.findById(id);
+		if (task.isPresent()) {
+			task.get().setCompleted(isCompleted);
+			return taskReposiotory.save(task.get());
+		} else {
+			throw new NotFoundServiceException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
+		}
+	}
 	
 	@Transactional
 	public Task completeTask(Long id) {
