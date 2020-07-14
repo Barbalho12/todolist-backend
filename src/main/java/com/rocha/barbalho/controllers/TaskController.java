@@ -33,6 +33,16 @@ public class TaskController {
 		return taskService.findAll();
 	}
 
+	@GetMapping("/completeds")
+	private List<Task> findAllCompleted() {
+		return taskService.findAllCompleted();
+	}
+
+	@GetMapping("/lefts")
+	private List<Task> findAllLeft() {
+		return taskService.findAllLeft();
+	}
+
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Task save(@Valid @RequestBody Task entity) {
