@@ -49,6 +49,11 @@ public class TaskController {
 		return taskService.update(id, entity);
 	}
 
+	@PutMapping("/complete/{id}")
+	public Task update(@PathVariable Long id) {
+		return taskService.completeTask(id);
+	}
+
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable(value = "id") Long id) {
 		taskService.delete(id);
