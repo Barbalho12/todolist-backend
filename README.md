@@ -1,3 +1,12 @@
+
+# TODO List - Backend + JSF
+
+<p align="center"><img src="doc/print-tela.png" width="700px"/></p>
+
+O serviço está diposnível no endereço https://tdl-backend.herokuapp.com para acesso ao front em JSF + Primefaces + Bootstrap.
+Os serviços da API que servem o App Flutter e o serviço em React estão em https://tdl-backend.herokuapp.com/tasks/.
+
+
 ## Features desenvolvidas
 
 - [x] A. JavaServer Faces (JSF)
@@ -68,3 +77,8 @@ Acesse novamente a raiz do projeto e execute:
 ```bash
 mvn spring-boot:run
 ```
+
+### Outros Projetos
+
+- [React](https://github.com/Barbalho12/todolist-spa)
+- [Flutter](https://github.com/Barbalho12/todolist-flutter)
