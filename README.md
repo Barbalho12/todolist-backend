@@ -3,7 +3,7 @@
 
 <p align="center"><img src="doc/print-tela.png" width="700px"/></p>
 
-O serviço está diposnível no endereço https://tdl-backend.herokuapp.com para acesso ao front em JSF + Primefaces + Bootstrap.
+O serviço está disponível no endereço https://tdl-backend.herokuapp.com para acesso ao front em JSF + Primefaces + Bootstrap.
 Os serviços da API que servem o App Flutter e o serviço em React estão em https://tdl-backend.herokuapp.com/tasks/.
 
 
