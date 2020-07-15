@@ -12,7 +12,7 @@
 - [x] J. Publicação no Heroku
 - [x] K. Aplicativo Flutter
 
-### Acenssando Aplicação no Heroku
+### Acessando aplicação no Heroku
 
 Endereço: https://tdl-backend.herokuapp.com/
 
@@ -59,7 +59,7 @@ Crie o container docker para o banco de dados executando o docker-compose.yaml:
 docker-compose up -d # ou "docker-compose start" se já executou o "up" em algum momento anterior
 ```
 Nesse passo será iniciado o banco de dados PostgreSQL, rodando na porta `5432`, e acessível em `localhost`.
-O banco terá username `postgres`, senha `1234` e a base de dados `todolistdb` usada pelo proejto já criada.
+O banco terá username `postgres`, senha `1234` e a base de dados `todolistdb` usada pelo projeto.
 
 #### Executando 
 
