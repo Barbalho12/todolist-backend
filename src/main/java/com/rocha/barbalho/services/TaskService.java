@@ -15,8 +15,13 @@ import com.rocha.barbalho.models.Task;
 import com.rocha.barbalho.repositories.TaskRepository;
 import com.rocha.barbalho.statics.StaticMessages;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 @Service
 public class TaskService {
+
+	@Autowired
+	private SimpMessagingTemplate template;
 
 	@Autowired
 	private TaskRepository taskReposiotory;
@@ -39,12 +44,14 @@ public class TaskService {
 	@Transactional
 	public void clearAllCompleted(){
 		taskReposiotory.deleteByCompletedTrue();
+		template.convertAndSend("/topic/tasks", "clearAllCompleted");
 	}
 
 	@Transactional
 	public void delete(Long id) {
 		if (taskReposiotory.existsById(id)) {
 			taskReposiotory.deleteById(id);
+			template.convertAndSend("/topic/tasks", "delete");
 		} else {
 			throw new NotFoundServiceException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
 		}
@@ -56,7 +63,9 @@ public class TaskService {
 			throw new BadRequestServiceExcepetion("Tarefa não pode ser nula");
 		}
 		if (taskReposiotory.existsById(id)) {
-			return taskReposiotory.save(task);
+			Task taskUpdate = taskReposiotory.save(task);
+			template.convertAndSend("/topic/tasks", "update");
+			return taskUpdate;
 		} else {
 			throw new NotFoundServiceException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
 		}
@@ -69,7 +78,9 @@ public class TaskService {
 		Optional<Task> task = taskReposiotory.findById(id);
 		if (task.isPresent()) {
 			task.get().setCompleted(isCompleted);
-			return taskReposiotory.save(task.get());
+			Task taskCompleted = taskReposiotory.save(task.get());
+			template.convertAndSend("/topic/tasks", "setCompleted");
+			return taskCompleted;
 		} else {
 			throw new NotFoundServiceException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
 		}
@@ -80,7 +91,9 @@ public class TaskService {
 		Optional<Task> task = taskReposiotory.findById(id);
 		if (task.isPresent()) {
 			task.get().setCompleted(true);
-			return taskReposiotory.save(task.get());
+			Task taskCompleted =taskReposiotory.save(task.get());
+			template.convertAndSend("/topic/tasks", "completeTask");
+			return taskCompleted;
 		} else {
 			throw new NotFoundServiceException(String.format(StaticMessages.VALIDATION_TASK_NOT_FOUND, id));
 		}
@@ -103,7 +116,11 @@ public class TaskService {
 			throw new BadRequestServiceExcepetion("Tarefa não pode ser nula");
 		}
 		task.setId(null);
-		return taskReposiotory.save(task);
+		Task taskCompleted = taskReposiotory.save(task);
+		template.convertAndSend("/topic/tasks", "save");
+		return taskCompleted;
+
+
 	}
 
 }
